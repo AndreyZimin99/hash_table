@@ -1,7 +1,7 @@
 class MyDict:
-    def __init__(self):
-        self.capacity = 8
-        self.load_factor = 0.75
+    def __init__(self, initial_capacity=4, load_factor=0.75):
+        self.capacity = initial_capacity
+        self.load_factor = load_factor
         self.size = 0
         self.table = [[] for _ in range(self.capacity)]
 
@@ -86,39 +86,39 @@ class MyDict:
                 yield (k, v)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     my_dict = MyDict()
 
     # Добавление элементов
-    my_dict["apple"] = 1
-    my_dict["banana"] = 2
-    my_dict["orange"] = 3
+    my_dict['яблоко'] = 1
+    my_dict['банан'] = 2
+    my_dict['груша'] = 3
 
     # Получение элементов
-    print(my_dict["apple"])  # Вывод: 1
-    print(my_dict.get("banana"))  # Вывод: 2
+    print(my_dict['яблоко'])
+    print(my_dict.get('банан'))
 
     # Проверка наличия ключей
-    print("banana" in my_dict)  # Вывод: True
-    print("grape" in my_dict)   # Вывод: False
+    print('банан' in my_dict)
+    print('вишня' in my_dict)
 
     # Количество элементов
-    print(len(my_dict))  # Вывод: 3
+    print(len(my_dict))
 
     # Итерация по ключам
     for key in my_dict.keys():
-        print(key)  # Выводит все ключи
+        print(key)
 
     # Обновление значения
-    my_dict["banana"] = 5  
-    print(my_dict["banana"])  # Вывод: 5
+    my_dict['банан'] = 5
+    print(my_dict['банан'])
 
     # Удаление элемента
-    del my_dict["orange"]  
-    print(len(my_dict))  # Вывод: 2
+    del my_dict['груша']
+    print(len(my_dict))
 
     # Проверка на удаление
     try:
-        print(my_dict["orange"])  # Выдаст ошибку KeyError
+        print(my_dict['груша'])
     except KeyError as e:
-        print(e)  # Вывод: Ключ orange не найден.
+        print(e)
