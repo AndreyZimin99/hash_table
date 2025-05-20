@@ -6,8 +6,8 @@ from main import MyDict
 def test_initialization():
     d = MyDict()
     assert len(d) == 0
-    assert d.capacity == 4
-    assert d.load_factor == 0.75
+    assert d._capacity == 4
+    assert d._load_factor == 0.75
 
 
 def test_set_get():
@@ -53,7 +53,7 @@ def test_dynamic_resize():
     d['банан'] = 2
     d['груша'] = 3
     assert len(d) == 3
-    assert d.capacity == 4
+    assert d._capacity == 4
 
 
 def test_keys():

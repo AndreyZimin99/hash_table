@@ -1,87 +1,98 @@
-class MyDict:
-    def __init__(self, initial_capacity=4, load_factor=0.75):
-        self.capacity = initial_capacity
-        self.load_factor = load_factor
-        self.size = 0
-        self.table = [[] for _ in range(self.capacity)]
+from typing import Any, Union
 
-    def _hash(self, key):
-        return hash(key) % self.capacity
+
+class MyDict:
+    def __init__(self, initial_capacity: int = 4, load_factor: float = 0.75):
+        self._capacity = initial_capacity
+        self._load_factor = load_factor
+        self._size = 0
+        self._buckets: list = [[] for _ in range(self._capacity)]
+
+    def _hash(self, key: Union[int, float, str, tuple, frozenset]):
+        return hash(key) % self._capacity
 
     def _resize(self):
-        old_table = self.table
-        self.capacity *= 2
-        self.table = [[] for _ in range(self.capacity)]
-        self.size = 0
+        old_table = self._buckets
+        self._capacity *= 2
+        self._buckets = [[] for _ in range(self._capacity)]
+        self._size = 0
 
         for chain in old_table:
             for key, value in chain:
                 self[key] = value
 
-    def __setitem__(self, key, value):
-        if self.size / self.capacity >= self.load_factor:
+    def __setitem__(
+        self,
+        key: Union[int, float, str, tuple, frozenset],
+        value: Any
+    ):
+        if self._size / self._capacity >= self._load_factor:
             self._resize()
 
         index = self._hash(key)
-        for i, (k, v) in enumerate(self.table[index]):
+        for i, (k, v) in enumerate(self._buckets[index]):
             if k == key:
-                self.table[index][i] = (key, value)
+                self._buckets[index][i] = (key, value)
                 return
-        self.table[index].append((key, value))
-        self.size += 1
+        self._buckets[index].append((key, value))
+        self._size += 1
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: Union[int, float, str, tuple, frozenset]):
         index = self._hash(key)
-        for k, v in self.table[index]:
+        for k, v in self._buckets[index]:
             if k == key:
                 return v
         raise KeyError(f'Ключ {key} не найден.')
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Union[int, float, str, tuple, frozenset]):
         index = self._hash(key)
-        for i, (k, v) in enumerate(self.table[index]):
+        for i, (k, v) in enumerate(self._buckets[index]):
             if k == key:
-                del self.table[index][i]
-                self.size -= 1
+                del self._buckets[index][i]
+                self._size -= 1
                 return
         raise KeyError(f'Ключ {key} не найден.')
 
-    def __contains__(self, key):
+    def __contains__(self, key: Union[int, float, str, tuple, frozenset]):
         index = self._hash(key)
-        for k, v in self.table[index]:
+        for k, v in self._buckets[index]:
             if k == key:
                 return True
         return False
 
     def __len__(self):
-        return self.size
+        return self._size
 
     def __iter__(self):
-        for chain in self.table:
+        for chain in self._buckets:
             for k, v in chain:
                 yield k
 
     def __next__(self):
-        return next(self._iter_keys)
+        return next(self.__iter__)
 
-    def get(self, key, default=None):
+    def get(
+        self,
+        key: Union[int, float, str, tuple, frozenset],
+        default: None = None
+    ):
         try:
             return self[key]
         except KeyError:
             return default
 
     def keys(self):
-        for chain in self.table:
+        for chain in self._buckets:
             for k, v in chain:
                 yield k
 
     def values(self):
-        for chain in self.table:
+        for chain in self._buckets:
             for k, v in chain:
                 yield v
 
     def items(self):
-        for chain in self.table:
+        for chain in self._buckets:
             for k, v in chain:
                 yield (k, v)
 
